@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website Request — iCANS</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      min-height: 100vh;
+      padding: 40px 20px 60px;
+    }
+
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.09);
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .hd {
+      background: #1A3461;
+      padding: 36px 40px 32px;
+      text-align: center;
+    }
+    .hd img { height: 46px; margin-bottom: 18px; display: block; margin-left: auto; margin-right: auto; }
+    .hd h1 { color: #fff; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .hd p  { color: rgba(255,255,255,.7); font-size: 14px; line-height: 1.5; }
+
+    /* ── Body ── */
+    .bd { padding: 36px 40px; }
+
+    .section { margin-bottom: 32px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      color: #1A3461;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid #e8ecf2;
+    }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .row.full { grid-template-columns: 1fr; }
+    .row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: #475569; }
+    label .req { color: #ef4444; margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #dce3ed;
+      border-radius: 7px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #1e293b;
+      background: #fafbfc;
+      outline: none;
+      transition: border-color .15s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #2DBD6E;
+      background: #fff;
+    }
+    textarea { resize: vertical; }
+    .hint { font-size: 12px; color: #94a3b8; margin-top: 3px; font-style: italic; }
+
+    /* Toggle row */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #475569;
+      cursor: pointer;
+      margin-bottom: 14px;
+    }
+    .toggle-row input[type="checkbox"] {
+      width: 16px; height: 16px; accent-color: #2DBD6E; cursor: pointer; flex-shrink: 0;
+    }
+
+    /* Conditional blocks */
+    .cond { margin-top: 14px; }
+    .hidden { display: none !important; }
+
+    /* Color swatches */
+    .color-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .color-field { display: flex; flex-direction: column; gap: 5px; }
+    .color-input-wrap { display: flex; align-items: center; gap: 10px; }
+    input[type="color"] {
+      width: 40px; height: 38px; border: 1.5px solid #dce3ed; border-radius: 6px;
+      padding: 2px; cursor: pointer; background: #fafbfc;
+    }
+    .color-hex { flex: 1; }
+
+    /* Submit row */
+    .submit-row {
+      padding: 28px 40px;
+      background: #f8f9fb;
+      border-top: 1px solid #e8ecf0;
+      text-align: center;
+    }
+    .btn-submit {
+      background: #2DBD6E;
+      color: #fff;
+      border: none;
+      padding: 14px 52px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+      letter-spacing: .2px;
+    }
+    .btn-submit:hover  { background: #25a85f; transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+    .submit-note { font-size: 12px; color: #aaa; margin-top: 10px; }
+
+    /* ── Thank-you ── */
+    .ty-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.09);
+      overflow: hidden;
+    }
+    .ty-top {
+      background: #1A3461;
+      padding: 48px 40px 40px;
+      text-align: center;
+    }
+    .ty-top img { height: 44px; margin: 0 auto 24px; display: block; }
+    .check-circle {
+      width: 68px; height: 68px; background: #2DBD6E; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 22px;
+    }
+    .check-circle svg { width: 32px; height: 32px; }
+    .ty-top h1 { color: #fff; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .ty-top p  { color: rgba(255,255,255,.72); font-size: 14px; line-height: 1.6; }
+    .ty-body { padding: 36px 40px; }
+    .steps-label {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .7px; color: #1A3461; margin-bottom: 18px;
+    }
+    .step-list { list-style: none; display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+    .step-list li { display: flex; align-items: flex-start; gap: 14px; }
+    .sn {
+      width: 28px; height: 28px; min-width: 28px; background: #1A3461; color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; margin-top: 1px;
+    }
+    .st strong { display: block; font-size: 14px; color: #1A3461; margin-bottom: 2px; }
+    .st span   { font-size: 13px; color: #64748b; line-height: 1.5; }
+    .ty-footer {
+      padding: 18px 40px;
+      background: #f8f9fb;
+      border-top: 1px solid #eee;
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    @media (max-width: 580px) {
+      body { padding: 16px 12px 40px; }
+      .hd, .bd { padding: 24px 20px; }
+      .submit-row { padding: 24px 20px; }
+      .row, .row.triple { grid-template-columns: 1fr; }
+      .color-row { grid-template-columns: 1fr; }
+      .ty-top, .ty-body { padding: 28px 20px; }
+      .ty-footer { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ FORM ═══════════ -->
+<div class="wrap" id="formSection">
+  <div class="hd">
+    <img src="https://assets.cdn.filesafe.space/wjjSZCOqKOUwN2bAADUS/media/69cc5abf38268d00d6262bf0.png" alt="iCANS" />
+    <h1>Website Request</h1>
+    <p>Fill out the form below and your iCANS specialist will get your website built and live.</p>
+  </div>
+
+  <form id="requestForm" novalidate>
+  <div class="bd">
+
+    <!-- 1. Contact -->
+    <div class="section">
+      <div class="section-title">Your Info</div>
+      <div class="row">
+        <div class="field">
+          <label>First Name <span class="req">*</span></label>
+          <input type="text" name="first_name" placeholder="Jane" required />
+        </div>
+        <div class="field">
+          <label>Last Name <span class="req">*</span></label>
+          <input type="text" name="last_name" placeholder="Smith" required />
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" name="email" placeholder="jane@example.com" required />
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" placeholder="(555) 555-5555" />
+        </div>
+      </div>
+      <div class="row full">
+        <div class="field">
+          <label>Company Name <span class="req">*</span></label>
+          <input type="text" name="company_name" placeholder="Acme Dumpster Rentals" required />
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Existing website -->
+    <div class="section">
+      <div class="section-title">Existing Website</div>
+      <label class="toggle-row">
+        <input type="checkbox" id="hasWebsite" name="has_existing_website" value="true" />
+        I already have a website I'd like to keep or use as a reference
+      </label>
+      <div id="existingWebBlock" class="hidden">
+        <div class="row full">
+          <div class="field">
+            <label>Current Website URL</label>
+            <input type="url" name="current_website_url" placeholder="https://www.example.com" />
+          </div>
+        </div>
+        <div class="row full">
+          <div class="field">
+            <label>Notes about your existing site</label>
+            <textarea name="existing_notes" rows="3" placeholder="What do you like about it? What should stay or change?"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Domain -->
+    <div class="section">
+      <div class="section-title">Domain</div>
+      <label class="toggle-row">
+        <input type="checkbox" id="hasDomain" name="has_domain" value="true" />
+        I already own a domain name
+      </label>
+      <div id="domainBlock" class="hidden">
+        <div class="row">
+          <div class="field">
+            <label>Domain Name</label>
+            <input type="text" name="domain_name" placeholder="yourbusiness.com" />
+          </div>
+          <div class="field">
+            <label>Domain Registrar</label>
+            <select name="domain_registrar">
+              <option value="">Where did you buy it?</option>
+              <option value="GoDaddy">GoDaddy</option>
+              <option value="Namecheap">Namecheap</option>
+              <option value="Squarespace">Squarespace / Google Domains</option>
+              <option value="Cloudflare">Cloudflare</option>
+              <option value="Bluehost">Bluehost</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Branding -->
+    <div class="section">
+      <div class="section-title">Branding</div>
+      <div class="color-row">
+        <div class="color-field">
+          <label>Primary Brand Color</label>
+          <div class="color-input-wrap">
+            <input type="color" id="colorPrimaryPicker" value="#1A3461" />
+            <input type="text" id="colorPrimaryHex" name="brand_color_primary" class="color-hex" value="#1A3461" placeholder="#1A3461" maxlength="7" />
+          </div>
+        </div>
+        <div class="color-field">
+          <label>Secondary / Accent Color</label>
+          <div class="color-input-wrap">
+            <input type="color" id="colorSecondaryPicker" value="#2DBD6E" />
+            <input type="text" id="colorSecondaryHex" name="brand_color_secondary" class="color-hex" value="#2DBD6E" placeholder="#2DBD6E" maxlength="7" />
+          </div>
+        </div>
+      </div>
+      <div class="row full">
+        <div class="field">
+          <label>Logo URL</label>
+          <input type="url" name="logo_link" placeholder="https://link-to-your-logo.com/logo.png" />
+          <p class="hint">Direct link to your logo file. PNG or SVG preferred. If you don't have one yet, leave this blank.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Anything else -->
+    <div class="section">
+      <div class="section-title">Anything Else</div>
+      <div class="row full">
+        <div class="field">
+          <label>Additional Notes</label>
+          <textarea name="additional_notes" rows="4" placeholder="Any special requests, pages you need, features you want, or anything else we should know..."></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="submit-row">
+    <button type="submit" class="btn-submit" id="submitBtn">Submit Request</button>
+    <p class="submit-note">By submitting you confirm all information is accurate.</p>
+  </div>
+  </form>
+</div>
+
+<!-- ═══════════ THANK YOU ═══════════ -->
+<div class="ty-wrap hidden" id="tySection">
+  <div class="ty-top">
+    <img src="https://assets.cdn.filesafe.space/wjjSZCOqKOUwN2bAADUS/media/69cc5abf38268d00d6262bf0.png" alt="iCANS" />
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+    <h1>Request Received!</h1>
+    <p>Your website request has been submitted.<br>Your iCANS specialist will take it from here.</p>
+  </div>
+  <div class="ty-body">
+    <p class="steps-label">What happens next</p>
+    <ul class="step-list">
+      <li>
+        <div class="sn">1</div>
+        <div class="st">
+          <strong>Your request is reviewed</strong>
+          <span>Your iCANS specialist will review your submission and plan out your website.</span>
+        </div>
+      </li>
+      <li>
+        <div class="sn">2</div>
+        <div class="st">
+          <strong>We'll reach out to confirm details</strong>
+          <span>Expect a follow-up from your specialist to go over any questions and next steps.</span>
+        </div>
+      </li>
+      <li>
+        <div class="sn">3</div>
+        <div class="st">
+          <strong>Build &amp; launch</strong>
+          <span>Your site gets built, connected to your domain, and launched — ready to take bookings.</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="ty-footer">Powered by iCANS &nbsp;·&nbsp; The dumpster rental platform built for haulers</div>
+</div>
+
+<script>
+  const WEBHOOK = 'https://icore.icans.ai/api/webhooks/website-request'
+
+  // Conditional blocks
+  document.getElementById('hasWebsite').addEventListener('change', function() {
+    document.getElementById('existingWebBlock').classList.toggle('hidden', !this.checked)
+  })
+  document.getElementById('hasDomain').addEventListener('change', function() {
+    document.getElementById('domainBlock').classList.toggle('hidden', !this.checked)
+  })
+
+  // Color pickers sync with hex inputs
+  function syncColor(picker, hex) {
+    picker.addEventListener('input', () => { hex.value = picker.value })
+    hex.addEventListener('input', () => {
+      const v = hex.value.trim()
+      if (/^#[0-9a-fA-F]{6}$/.test(v)) picker.value = v
+    })
+  }
+  syncColor(document.getElementById('colorPrimaryPicker'), document.getElementById('colorPrimaryHex'))
+  syncColor(document.getElementById('colorSecondaryPicker'), document.getElementById('colorSecondaryHex'))
+
+  // Submit
+  document.getElementById('requestForm').addEventListener('submit', async function(e) {
+    e.preventDefault()
+    const data = new FormData(this)
+    const get  = k => (data.get(k) || '').trim()
+
+    if (!get('first_name') || !get('last_name') || !get('email') || !get('company_name')) {
+      alert('Please fill in First Name, Last Name, Email, and Company Name.')
+      return
+    }
+
+    const payload = {
+      first_name:            get('first_name'),
+      last_name:             get('last_name'),
+      full_name:             `${get('first_name')} ${get('last_name')}`,
+      email:                 get('email'),
+      phone:                 get('phone') || null,
+      company_name:          get('company_name'),
+      has_existing_website:  data.get('has_existing_website') === 'true',
+      current_website_url:   get('current_website_url') || null,
+      existing_notes:        get('existing_notes') || null,
+      has_domain:            data.get('has_domain') === 'true',
+      domain_name:           get('domain_name') || null,
+      domain_registrar:      get('domain_registrar') || null,
+      brand_color_primary:   get('brand_color_primary') || null,
+      brand_color_secondary: get('brand_color_secondary') || null,
+      logo_link:             get('logo_link') || null,
+      additional_notes:      get('additional_notes') || null,
+      submitted_at:          new Date().toISOString(),
+    }
+
+    const btn = document.getElementById('submitBtn')
+    btn.disabled = true
+    btn.textContent = 'Submitting…'
+
+    try {
+      const res = await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (res.ok) {
+        document.getElementById('formSection').classList.add('hidden')
+        document.getElementById('tySection').classList.remove('hidden')
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || `Server error ${res.status}`)
+      }
+    } catch (err) {
+      console.error(err)
+      alert('There was a problem submitting the form: ' + err.message + '\n\nPlease try again or contact your iCANS specialist.')
+      btn.disabled = false
+      btn.textContent = 'Submit Request'
+    }
+  })
+</script>
+</body>
+</html>
